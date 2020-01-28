@@ -18,29 +18,23 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    long id;
+    long customerId;
 
     @Column(name = "name")
-    @NotNull
     private String customerName;
 
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    private Address address;
-
-
-    @OneToMany(
-            mappedBy = "customer",
+    @OneToMany(mappedBy = "customerId",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+            orphanRemoval = true)
+    private List<Address> addressList;
+
+    @OneToMany(mappedBy = "customerId",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<Contact> contactList = new ArrayList<>();
 
-
-    @OneToMany(
-            mappedBy = "customer",
+    @OneToMany(mappedBy = "customerId",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+            orphanRemoval = true)
     private List<License> licenseList = new ArrayList<>();
 }

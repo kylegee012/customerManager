@@ -18,18 +18,21 @@ public class Contact {
     @GeneratedValue(strategy= GenerationType.AUTO)
     long contactId;
 
+    @JoinColumn(name = "customerId")
+    private long customerId;
+
     @Column(name = "firstName")
-    @NotNull
     private String firstName;
 
     @Column(name = "lastName")
-    @NotNull
     private String lastName;
 
     @Column(name = "phoneNumber")
-    @NotNull
     private String phoneNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Customer customer;
+    public Contact( String firstName,  String lastName,  String phoneNumber) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+    }
 }

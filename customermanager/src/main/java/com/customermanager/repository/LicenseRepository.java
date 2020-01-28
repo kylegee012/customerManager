@@ -16,4 +16,6 @@ public interface LicenseRepository extends CrudRepository<License, Long> {
 
     List<License> findByEndDateAfter(Date date);
 
+    List<License> findByEndDateBefore(Date date);
+
 }

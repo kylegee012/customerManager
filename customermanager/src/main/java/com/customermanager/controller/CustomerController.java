@@ -9,9 +9,11 @@ import java.util.List;
 
 public interface CustomerController {
 
-    public ResponseEntity<String> createCustomer(String payload);
+    public ResponseEntity<String> createCustomer(String customerInfo);
 
-    public ResponseEntity<String> createLicense(License license, String customerName);
+    public ResponseEntity<String> addContact(String customerInfo, String customerName);
+
+    public ResponseEntity<String> addAddress(String customerInfo, String customerName);
 
     public ResponseEntity<Customer> getCustomerByName(String name);
 
@@ -21,7 +23,7 @@ public interface CustomerController {
 
     public ResponseEntity<List<Customer>> expiringLicensesBetween(Date start, Date end);
 
-    public ResponseEntity<List<Customer>> unlicensedFrom(Date date);
+    public ResponseEntity<List<Customer>> getUnlicensedFrom(Date date);
 
 
 }

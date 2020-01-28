@@ -1,9 +1,9 @@
 package com.customermanager.controller;
 
+import com.customermanager.domain.Address;
+import com.customermanager.domain.Contact;
 import com.customermanager.domain.Customer;
-import com.customermanager.domain.License;
 import com.customermanager.repository.CustomerRepository;
-import com.customermanager.repository.LicenseRepository;
 import com.customermanager.service.CustomerService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping(value="/customer")
@@ -23,65 +25,61 @@ public class CustomerControllerImpl implements CustomerController {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private LicenseRepository licenseRepository;
-
-    @Autowired
     private CustomerService customerService;
 
     @PostMapping("/createCustomer")
-    public ResponseEntity<String> createCustomer(@RequestBody String payload ) {
+    public ResponseEntity<String> createCustomer(@RequestBody String customerInfo ) {
         Gson g = new GsonBuilder().setDateFormat("MM-dd-yyyy").create();
-        Customer newCustomer = g.fromJson(payload, Customer.class);
+        Customer newCustomer = g.fromJson(customerInfo, Customer.class);
         newCustomer = customerRepository.save(newCustomer);
         return new ResponseEntity<>("Created: " + newCustomer.toString(), HttpStatus.OK);
     }
 
-    @PostMapping("/addLicense/{name}")
-    public ResponseEntity<String> createLicense(@RequestBody License license, @RequestParam("name") String customerName) {
-
-        License newLicense = licenseRepository.save(license);
-        return new ResponseEntity<>("Added " + newLicense.toString() + " to " + customerName, HttpStatus.OK);
+    @PostMapping("/addAddress/{customerName}")
+    public ResponseEntity<String> addAddress(@RequestBody String addressInfo, String customerName ) {
+        Address address = customerService.addAddress(addressInfo, customerName);
+        return new ResponseEntity<>("Added addressList: " + address.toString() + " for " + customerName, HttpStatus.OK);
     }
 
-    @GetMapping("/CustomerName/{name}")
-    public ResponseEntity<Customer> getCustomerByName(@RequestParam("name") String customerName) {
-
-//        Customer customerList = customerRepository.findByCustomerNameIgnoreCase(customerName);
-//        List<Customer> customerList = new ArrayList<>();
-//        customerRepository.findAll().forEach(customerList::add);
-        return null;
-
-//        return new ResponseEntity<Customer>(customerList, HttpStatus.OK);
+    @PostMapping("/addContact/{customerName}")
+    public ResponseEntity<String> addContact(@RequestBody String contactInfo, String customerName ) {
+        Contact contact = customerService.addContact(contactInfo, customerName);
+        return new ResponseEntity<>("Added contact: " + contact.toString() + " for " + customerName, HttpStatus.OK);
     }
 
-    @GetMapping("/ViewAllCustomers")
+    @GetMapping("/viewCustomer/{customerName}")
+    public ResponseEntity<Customer> getCustomerByName(String customerName) {
+        return new ResponseEntity<>(customerRepository.findByCustomerNameIgnoreCase(customerName), HttpStatus.OK);
+    }
+
+    @GetMapping("/viewAllCustomers")
     public ResponseEntity<List<Customer>> getAllCustomers() {
-        List<Customer> customerList = new ArrayList<>();
-        customerRepository.findAll().forEach(customerList::add);
+        List<Customer> customerList = StreamSupport.stream(customerRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
         return new ResponseEntity<>(customerList, HttpStatus.OK);
     }
 
-    @GetMapping("/purchasedLicensesFrom/{dateOne}/{dateTwo}")
+    @GetMapping("/purchasedLicensesFrom/{dateOne}/to{dateTwo}")
     public ResponseEntity<List<Customer>> purchasedLicensesBetween(
-            @RequestParam("dateOne") @DateTimeFormat(pattern = "MM-dd-yyyy") Date start,
-            @RequestParam("dateTwo") @DateTimeFormat(pattern = "MM-dd-yyyy") Date end){
+            @DateTimeFormat(pattern = "MM-dd-yyyy") Date start,
+            @DateTimeFormat(pattern = "MM-dd-yyyy") Date end){
 
         List<Customer> customerList = customerService.getPurchasedLicensesBetween(start, end);
         return new ResponseEntity<>(customerList, HttpStatus.OK);
     }
 
-    @GetMapping("/expiredLicenseFrom/{dateOne}")
+    @GetMapping("/expiredLicenseFrom/{dateOne}/to{dateTwo}")
     public ResponseEntity<List<Customer>> expiringLicensesBetween(
-            @RequestParam("dateOne") @DateTimeFormat(pattern = "MM-dd-yyyy") Date start,
-            @RequestParam("dateTwo") @DateTimeFormat(pattern = "MM-dd-yyyy") Date end){
+            @DateTimeFormat(pattern = "MM-dd-yyyy") Date start,
+            @DateTimeFormat(pattern = "MM-dd-yyyy") Date end){
 
         List<Customer> customerList = customerService.getExpiringLicensesBetween(start, end);
         return new ResponseEntity<>(customerList, HttpStatus.OK);
     }
 
-    @GetMapping("/getUnlicensedFrom/{dateOne}/{dateTwo}")
-    public ResponseEntity<List<Customer>> unlicensedFrom(
-            @RequestParam("dateOne") @DateTimeFormat(pattern = "MM-dd-yyyy") Date date){
+    @GetMapping("/getUnlicensedFrom/{dateOne}")
+    public ResponseEntity<List<Customer>> getUnlicensedFrom(
+            @DateTimeFormat(pattern = "MM-dd-yyyy") Date date){
 
         List<Customer> customerList = customerService.getUnlicensedFrom(date);
         return new ResponseEntity<>(customerList, HttpStatus.OK);

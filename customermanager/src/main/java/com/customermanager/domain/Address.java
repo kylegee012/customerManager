@@ -11,34 +11,36 @@ import javax.validation.constraints.NotNull;
 @Setter
 @ToString
 @Entity
-@Table(name = "address")
+@Table(name = "addressList")
 public class Address {
 
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Id
     long addressId;
 
+    @JoinColumn(name = "customerId")
+    private long customerId;
+
     @Column(name = "street")
-    @NotNull
     private String street;
 
     @Column(name = "secondaryNumber")
     private String secondaryNumber;
 
     @Column(name = "city")
-    @NotNull
     private String city;
 
     @Column(name = "state")
-    @NotNull
     private String state;
 
     @Column(name = "zipCode")
-    @NotNull
     private String zipCode;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
-    
+    public Address( String street, String secondaryNumber, String city,  String state,  String zipCode) {
+        this.street = street;
+        this.secondaryNumber = secondaryNumber;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
+    }
 }

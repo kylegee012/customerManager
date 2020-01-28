@@ -5,7 +5,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Getter
@@ -17,27 +16,31 @@ public class License {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    long licenseId;
+    private long licenseId;
+
+    @JoinColumn(name = "customerId")
+    private long customerId;
 
     @Column(name = "startDate")
-    @NotNull
     private Date startDate;
 
     @Column(name = "endDate")
-    @NotNull
     private Date endDate;
 
     @Column(name = "seats")
-    @NotNull
     private Integer seats;
 
     @Column(name = "edition")
     private String edition;
 
     @Column(name = "purchaseDate")
-    @NotNull
     private Date purchaseDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Customer customer;
+    public License(Date startDate, Date endDate, Integer seats, String edition, Date purchaseDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.seats = seats;
+        this.edition = edition;
+        this.purchaseDate = purchaseDate;
+    }
 }
