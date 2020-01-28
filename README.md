@@ -8,19 +8,19 @@ Clone the repo to your local machine, install the following, and build and run t
 
 ### Prerequisites and Installation
 
-	1. [Java 12](https://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase12-5440181.html) - Database
-		1. Download the zip
-		2. Extract
-		3. Add '...\gradle-5.4\bin' to your PATH variable
+[Java 12](https://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase12-5440181.html) - Database<br/>
+		1. Download the zip<br/>
+		2. Extract<br/>
+		3. Add '...\gradle-5.4\bin' to your PATH variable<br/>
 		
-    2. [Gradle 5.4](https://gradle.org/releases/) - Dependency Management
-		1. Download the zip
-		2. Extract
-		3. Add '...\Java\jdk-12.0.1\bin' to your PATH variable
+[Gradle 5.4](https://gradle.org/releases/) - Dependency Management<br/>
+		1. Download the zip<br/>
+		2. Extract<br/>
+		3. Add '...\Java\jdk-12.0.1\bin' to your PATH variable<br/>
 		
-    3. [PostgresSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads) - Database
-		1. Download and run the executable
-		2. Set your passsword in the installation guide
+[PostgresSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads) - Database<br/>
+		1. Download and run the executable<br/>
+		2. Set your passsword in the installation guide<br/>
 		3. Open pgAdmin app in your file directory and it should launch an in-browser database management view
 
 ## Using the app
